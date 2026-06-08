@@ -353,7 +353,7 @@ pub(super) fn render_remove_worktree_overlay(app: &AppState, frame: &mut Frame, 
 
     frame.render_widget(
         Paragraph::new(Line::from(vec![Span::styled(
-            &format!(" {}", tr!("dialog.delete_worktree")),
+            format!(" {}", tr!("dialog.delete_worktree")),
             Style::default()
                 .fg(app.palette.red)
                 .add_modifier(Modifier::BOLD),

@@ -76,7 +76,7 @@ pub(super) fn render_release_notes_overlay(app: &AppState, frame: &mut Frame, ar
         frame,
         release_notes_close_button_rect(header_rows[0]),
         Some("esc"),
-        &tr!("release.close"),
+        tr!("release.close"),
         Style::default()
             .fg(panel_contrast_fg(&app.palette))
             .bg(app.palette.accent)
@@ -193,7 +193,7 @@ pub(super) fn render_product_announcement_overlay(app: &AppState, frame: &mut Fr
         frame,
         release_notes_close_button_rect(header_rows[0]),
         Some("esc"),
-        &tr!("release.close"),
+        tr!("release.close"),
         Style::default()
             .fg(panel_contrast_fg(&app.palette))
             .bg(app.palette.accent)
@@ -453,7 +453,7 @@ pub(crate) fn release_notes_wrapped_line_count(lines: &[(usize, Line<'_>)], widt
 }
 
 pub(crate) fn release_notes_close_button_rect(area: Rect) -> Rect {
-    let width = action_button_width(Some("esc"), &tr!("release.close"));
+    let width = action_button_width(Some("esc"), tr!("release.close"));
     Rect::new(area.x + area.width.saturating_sub(width), area.y, width, 1)
 }
 
