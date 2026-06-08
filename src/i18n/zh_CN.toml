@@ -143,6 +143,11 @@ cycle_pane_next = "下一个窗格"
 cycle_pane_previous = "上一个窗格"
 last_pane = "最后窗格"
 custom_command = "自定义命令"
+focus_agent_1_9 = "聚焦 Agent 1-9"
+switch_workspace_1_9 = "切换工作区 1-9"
+switch_tab_1_9 = "切换标签页 1-9"
+session_navigator = "会话导航器"
+workspace_navigation = "工作区导航"
 
 [navigator]
 search_panes = "搜索窗格"

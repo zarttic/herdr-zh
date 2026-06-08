@@ -143,6 +143,11 @@ cycle_pane_next = "cycle pane next"
 cycle_pane_previous = "cycle pane previous"
 last_pane = "last pane"
 custom_command = "custom command"
+focus_agent_1_9 = "focus agent 1-9"
+switch_workspace_1_9 = "switch workspace 1-9"
+switch_tab_1_9 = "switch tab 1-9"
+session_navigator = "session navigator"
+workspace_navigation = "workspace navigation"
 
 [navigator]
 search_panes = "search panes"
