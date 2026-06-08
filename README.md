@@ -22,14 +22,15 @@
 
 ## 安装
 
-从本仓库 [Releases](https://github.com/zarttic/herdr-zh/releases) 下载对应平台的二进制文件（需要 Linux 或 macOS）。
+从 [Releases](https://github.com/zarttic/herdr-zh/releases) 下载对应平台的二进制文件（需要 Linux 或 macOS）。
 
-或使用原项目的安装方式：
+或从源码构建：
 
 ```bash
-curl -fsSL https://herdr.dev/install.sh | sh
-brew install herdr          # Homebrew
-mise use -g herdr           # mise
+git clone https://github.com/zarttic/herdr-zh.git
+cd herdr-zh
+cargo build --release
+./target/release/herdr
 ```
 
 ## 快速开始
