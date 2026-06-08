@@ -1,0 +1,45 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 执行
+  workflow_dispatch:      # 支持手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync upstream master
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git remote add upstream https://github.com/ogulcancelik/herdr.git || true
+          git fetch upstream
+
+          # 检查是否有新提交
+          LOCAL=$(git rev-parse HEAD)
+          UPSTREAM=$(git rev-parse upstream/master)
+
+          if [ "$LOCAL" = "$UPSTREAM" ]; then
+            echo "Already up to date."
+            exit 0
+          fi
+
+          # 尝试合并
+          git merge upstream/master --no-edit -m "chore: sync with upstream master" || {
+            echo "::warning::Merge conflict detected, manual resolution required."
+            git merge --abort
+            exit 1
+          }
+
+          git push origin master
+          echo "Synced successfully."
