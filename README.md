@@ -22,7 +22,11 @@
 
 ## 安装
 
-从 [Releases](https://github.com/zarttic/herdr-zh/releases) 下载对应平台的二进制文件（需要 Linux 或 macOS）。
+```bash
+curl -fsSL https://raw.githubusercontent.com/zarttic/herdr-zh/master/install.sh | sh
+```
+
+或从 [Releases](https://github.com/zarttic/herdr-zh/releases) 手动下载对应平台的二进制文件。
 
 或从源码构建：
 
