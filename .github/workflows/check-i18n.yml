@@ -1,0 +1,53 @@
+name: Check i18n Coverage
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'src/i18n/**'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'src/i18n/**'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare en.toml vs zh_CN.toml
+        run: |
+          echo "## i18n 翻译覆盖率报告" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 提取 en.toml 的 key
+          grep -oP '^[a-z][\w.-]*' src/i18n/en.toml | sort > /tmp/en_keys.txt
+          # 提取 zh_CN.toml 的 key
+          grep -oP '^[a-z][\w.-]*' src/i18n/zh_CN.toml | sort > /tmp/zh_keys.txt
+
+          EN_COUNT=$(wc -l < /tmp/en_keys.txt)
+          ZH_COUNT=$(wc -l < /tmp/zh_keys.txt)
+
+          # 找出缺失的 key
+          comm -23 /tmp/en_keys.txt /tmp/zh_keys.txt > /tmp/missing.txt
+          MISSING=$(wc -l < /tmp/missing.txt)
+
+          echo "| 项目 | 数量 |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 英文 key 总数 | $EN_COUNT |" >> $GITHUB_STEP_SUMMARY
+          echo "| 中文 key 总数 | $ZH_COUNT |" >> $GITHUB_STEP_SUMMARY
+          echo "| 缺失翻译 | $MISSING |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$MISSING" -gt 0 ]; then
+            echo "### ❌ 缺失的翻译 key:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat /tmp/missing.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "::warning::缺失 $MISSING 个翻译项"
+            exit 1
+          else
+            echo "### ✅ 翻译完整，无缺失项" >> $GITHUB_STEP_SUMMARY
+          fi
