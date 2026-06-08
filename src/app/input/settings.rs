@@ -20,6 +20,7 @@ pub(super) enum SettingsAction {
     SavePaneHistory(bool),
     SaveSwitchAsciiInputSourceInPrefix(bool),
     InstallRecommendedIntegrations,
+    SaveLanguage(crate::i18n::Language),
 }
 
 /// Map an Experiments row index to the toggle action that flips it.
@@ -56,6 +57,7 @@ impl App {
                 SettingsAction::InstallRecommendedIntegrations => {
                     self.install_recommended_integrations()
                 }
+                SettingsAction::SaveLanguage(lang) => self.save_language(lang),
             }
         }
         if previous_section != SettingsSection::Integrations
@@ -75,6 +77,13 @@ fn current_theme_index(theme_name: &str) -> usize {
     THEME_NAMES
         .iter()
         .position(|name| normalize_theme_name(name) == normalized)
+        .unwrap_or(0)
+}
+
+fn current_language_index(lang: crate::i18n::Language) -> usize {
+    crate::i18n::Language::all()
+        .iter()
+        .position(|&l| l == lang)
         .unwrap_or(0)
 }
 
@@ -131,6 +140,16 @@ fn apply_settings(state: &mut AppState) -> Option<SettingsAction> {
             state.settings.original_theme = None;
             super::modal::leave_modal(state);
             Some(SettingsAction::SaveTheme(theme_name))
+        }
+        SettingsSection::Language => {
+            if let Some(&lang) =
+                crate::i18n::Language::all().get(state.settings.list.selected)
+            {
+                super::modal::leave_modal(state);
+                return Some(SettingsAction::SaveLanguage(lang));
+            }
+            super::modal::leave_modal(state);
+            None
         }
         SettingsSection::Integrations if integrations_need_install(state) => {
             Some(SettingsAction::InstallRecommendedIntegrations)
@@ -287,6 +306,37 @@ pub(super) fn update_settings_state(state: &mut AppState, key: KeyEvent) -> Opti
                 _ => {}
             },
         },
+        SettingsSection::Language => match key.code {
+            KeyCode::Up | KeyCode::Char('k') => state.settings.list.move_prev(),
+            KeyCode::Down | KeyCode::Char('j') => {
+                state
+                    .settings
+                    .list
+                    .move_next(crate::i18n::Language::all().len());
+            }
+            KeyCode::Enter | KeyCode::Char(' ') => {
+                if let Some(&lang) =
+                    crate::i18n::Language::all().get(state.settings.list.selected)
+                {
+                    return Some(SettingsAction::SaveLanguage(lang));
+                }
+            }
+            KeyCode::BackTab | KeyCode::Left | KeyCode::Char('h') => {
+                state.settings.section = SettingsSection::Experiments;
+                state.settings.list.selected = 0;
+            }
+            KeyCode::Tab | KeyCode::Right | KeyCode::Char('l') => {
+                state.settings.section = SettingsSection::Theme;
+                state.settings.list.selected = current_theme_index(&state.theme_name);
+            }
+            _ => {
+                if let Some(super::modal::ModalAction::Close) =
+                    super::modal::modal_action_from_key(&key, super::modal::SETTINGS_ACTIONS)
+                {
+                    cancel_settings(state);
+                }
+            }
+        },
     }
 
     None
@@ -307,6 +357,7 @@ pub(crate) fn open_settings_at(state: &mut AppState, section: SettingsSection) {
         SettingsSection::PaneLabels => usize::from(!state.agent_border_labels_enabled()),
         SettingsSection::Experiments => 0,
         SettingsSection::Integrations => 0,
+        SettingsSection::Language => current_language_index(state.language),
     };
     state.mode = Mode::Settings;
 }
@@ -404,6 +455,16 @@ impl AppState {
                 }
             }
             SettingsSection::Integrations => None,
+            SettingsSection::Language => {
+                let max_visible = area.height as usize;
+                let scroll = if self.settings.list.selected >= max_visible {
+                    self.settings.list.selected - max_visible + 1
+                } else {
+                    0
+                };
+                let idx = scroll + (row - area.y) as usize;
+                (idx < crate::i18n::Language::all().len()).then_some(idx)
+            }
         }
     }
 
@@ -421,6 +482,7 @@ impl AppState {
                         }
                         SettingsSection::Experiments => 0,
                         SettingsSection::Integrations => 0,
+                        SettingsSection::Language => current_language_index(self.language),
                     });
                     return None;
                 }
@@ -445,6 +507,11 @@ impl AppState {
                         }
                         SettingsSection::Experiments => experiment_toggle_action(self, idx),
                         SettingsSection::Integrations => None,
+                        SettingsSection::Language => {
+                            crate::i18n::Language::all()
+                                .get(idx)
+                                .map(|&lang| SettingsAction::SaveLanguage(lang))
+                        }
                     };
                 }
 

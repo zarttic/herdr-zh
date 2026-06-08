@@ -309,6 +309,14 @@ fn load_live_section<T>(
 }
 
 pub(crate) fn upsert_top_level_bool(content: &str, key: &str, value: bool) -> String {
+    upsert_top_level_raw(content, key, &value.to_string())
+}
+
+pub(crate) fn upsert_top_level_value(content: &str, key: &str, value: &str) -> String {
+    upsert_top_level_raw(content, key, value)
+}
+
+fn upsert_top_level_raw(content: &str, key: &str, value: &str) -> String {
     let replacement = format!("{key} = {value}");
     let mut lines: Vec<String> = content.lines().map(|line| line.to_string()).collect();
     let mut in_section = false;

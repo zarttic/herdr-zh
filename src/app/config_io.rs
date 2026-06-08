@@ -107,6 +107,20 @@ impl App {
         }
     }
 
+    pub(super) fn save_language(&mut self, lang: crate::i18n::Language) {
+        if self.update_config_file("language", |content| {
+            crate::config::upsert_top_level_value(
+                content,
+                "language",
+                &format!("\"{}\"", lang.code()),
+            )
+        }) {
+            self.state.language = lang;
+            crate::i18n::init(lang);
+            self.apply_config_from_disk(false);
+        }
+    }
+
     pub(super) fn save_agent_panel_scope(&mut self, scope: crate::app::state::AgentPanelScope) {
         let value = match scope {
             crate::app::state::AgentPanelScope::CurrentWorkspace => {

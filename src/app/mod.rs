@@ -528,6 +528,11 @@ impl App {
                 .name
                 .clone()
                 .unwrap_or_else(|| "catppuccin".to_string()),
+            language: config
+                .language
+                .as_deref()
+                .and_then(crate::i18n::Language::from_code)
+                .unwrap_or(crate::i18n::Language::detect_from_env()),
             settings: state::SettingsState {
                 section: state::SettingsSection::Theme,
                 list: state::SelectionListState::new(0),

@@ -247,6 +247,7 @@ impl App {
                     SettingsAction::InstallRecommendedIntegrations => {
                         self.install_recommended_integrations()
                     }
+                    SettingsAction::SaveLanguage(lang) => self.save_language(lang),
                 }
             }
         }
