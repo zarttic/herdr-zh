@@ -1,3 +1,4 @@
+use crate::tr;
 use ratatui::{
     layout::{Alignment, Rect},
     style::{Modifier, Style},
@@ -90,8 +91,8 @@ fn agent_panel_current_workspace_idx(app: &AppState) -> Option<usize> {
 
 fn agent_panel_toggle_label(scope: AgentPanelScope) -> &'static str {
     match scope {
-        AgentPanelScope::CurrentWorkspace => "current",
-        AgentPanelScope::AllWorkspaces => "all",
+        AgentPanelScope::CurrentWorkspace => tr!("sidebar.current"),
+        AgentPanelScope::AllWorkspaces => tr!("sidebar.all"),
     }
 }
 
@@ -186,11 +187,11 @@ fn agent_panel_entries_with_runtimes(
 
 pub(super) fn agent_panel_status_key(state: AgentState, seen: bool) -> &'static str {
     match (state, seen) {
-        (AgentState::Idle, false) => "done",
-        (AgentState::Idle, true) => "idle",
-        (AgentState::Working, _) => "working",
-        (AgentState::Blocked, _) => "blocked",
-        (AgentState::Unknown, _) => "unknown",
+        (AgentState::Idle, false) => tr!("agent_state.done"),
+        (AgentState::Idle, true) => tr!("agent_state.idle"),
+        (AgentState::Working, _) => tr!("agent_state.working"),
+        (AgentState::Blocked, _) => tr!("agent_state.blocked"),
+        (AgentState::Unknown, _) => tr!("agent_state.unknown"),
     }
 }
 
@@ -863,7 +864,7 @@ fn render_workspace_list(
     if area.height > 0 {
         frame.render_widget(
             Paragraph::new(Line::from(vec![Span::styled(
-                " spaces",
+                format!(" {}", tr!("sidebar.spaces")),
                 Style::default().fg(p.overlay0).add_modifier(Modifier::BOLD),
             )])),
             Rect::new(area.x, area.y, area.width, 1),
@@ -1023,7 +1024,7 @@ fn render_workspace_list(
     if app.mouse_capture && list_bottom > area.y {
         let new_rect = app.sidebar_new_button_rect();
         frame.render_widget(
-            Paragraph::new(Span::styled(" new", Style::default().fg(p.overlay0))),
+            Paragraph::new(Span::styled(format!(" {}", tr!("sidebar.new")), Style::default().fg(p.overlay0))),
             new_rect,
         );
 
@@ -1034,10 +1035,10 @@ fn render_workspace_list(
                     "● ",
                     Style::default().fg(p.accent).add_modifier(Modifier::BOLD),
                 ),
-                Span::styled("menu", Style::default().fg(p.overlay0)),
+                Span::styled(tr!("sidebar.menu"), Style::default().fg(p.overlay0)),
             ])
         } else {
-            Line::from(vec![Span::styled("menu", Style::default().fg(p.overlay0))])
+            Line::from(vec![Span::styled(tr!("sidebar.menu"), Style::default().fg(p.overlay0))])
         };
         frame.render_widget(
             Paragraph::new(menu_line).alignment(Alignment::Right),
@@ -1066,7 +1067,7 @@ fn render_agent_detail(
 
     frame.render_widget(
         Paragraph::new(Line::from(vec![Span::styled(
-            " agents",
+            format!(" {}", tr!("sidebar.agents")),
             Style::default().fg(p.overlay0).add_modifier(Modifier::BOLD),
         )])),
         Rect::new(area.x, area.y + 1, area.width, 1),
@@ -1106,7 +1107,7 @@ fn render_agent_detail(
         let label = detail
             .state_labels
             .get(agent_panel_status_key(detail.state, detail.seen))
-            .map(String::as_str)
+            .cloned()
             .unwrap_or_else(|| state_label(detail.state, detail.seen));
 
         let row_style = if is_active {

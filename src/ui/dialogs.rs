@@ -1,3 +1,4 @@
+use crate::tr;
 use ratatui::{
     layout::{Constraint, Layout, Rect},
     style::{Modifier, Style},
@@ -34,15 +35,15 @@ pub(crate) fn rename_button_rects(inner: Rect) -> (Rect, Rect, Rect) {
         &[
             ActionButtonSpec {
                 hint: Some("↵"),
-                label: "save",
+                label: tr!("button.save"),
             },
             ActionButtonSpec {
                 hint: Some("^c"),
-                label: "clear",
+                label: tr!("button.clear"),
             },
             ActionButtonSpec {
                 hint: Some("esc"),
-                label: "cancel",
+                label: tr!("button.cancel"),
             },
         ],
         2,
@@ -55,10 +56,10 @@ pub(super) fn render_rename_overlay(app: &AppState, frame: &mut Frame, area: Rec
     super::dim_background(frame, area);
 
     let title = match app.mode {
-        Mode::RenameWorkspace => "rename workspace",
-        Mode::RenameTab if app.creating_new_tab => "new tab",
-        Mode::RenameTab => "rename tab",
-        Mode::RenamePane => "rename pane",
+        Mode::RenameWorkspace => tr!("dialog.rename_workspace"),
+        Mode::RenameTab if app.creating_new_tab => tr!("dialog.new_tab"),
+        Mode::RenameTab => tr!("dialog.rename_tab"),
+        Mode::RenamePane => tr!("dialog.rename_pane"),
         _ => return,
     };
 
@@ -97,7 +98,7 @@ pub(super) fn render_rename_overlay(app: &AppState, frame: &mut Frame, area: Rec
         frame,
         save_rect,
         Some("↵"),
-        "save",
+        tr!("button.save"),
         Style::default()
             .fg(panel_contrast_fg(&app.palette))
             .bg(app.palette.accent)
@@ -107,7 +108,7 @@ pub(super) fn render_rename_overlay(app: &AppState, frame: &mut Frame, area: Rec
         frame,
         clear_rect,
         Some("^c"),
-        "clear",
+        tr!("button.clear"),
         Style::default()
             .fg(app.palette.text)
             .bg(app.palette.surface0)
@@ -117,7 +118,7 @@ pub(super) fn render_rename_overlay(app: &AppState, frame: &mut Frame, area: Rec
         frame,
         cancel_rect,
         Some("esc"),
-        "cancel",
+        tr!("button.cancel"),
         Style::default()
             .fg(app.palette.text)
             .bg(app.palette.surface0)
@@ -142,11 +143,11 @@ pub(crate) fn new_linked_worktree_button_rects(inner: Rect) -> (Rect, Rect) {
         &[
             ActionButtonSpec {
                 hint: Some("↵"),
-                label: "create and open",
+                label: tr!("button.create_and_open"),
             },
             ActionButtonSpec {
                 hint: Some("esc"),
-                label: "cancel",
+                label: tr!("button.cancel"),
             },
         ],
         2,
@@ -161,9 +162,9 @@ pub(crate) fn remove_worktree_popup_rect(area: Rect) -> Option<Rect> {
 
 pub(crate) fn remove_worktree_button_rects(inner: Rect, force_confirmation: bool) -> (Rect, Rect) {
     let primary_label = if force_confirmation {
-        "delete anyway"
+        tr!("button.delete_anyway")
     } else {
-        "remove"
+        tr!("button.remove")
     };
     let rects = action_button_row_rects(
         inner,
@@ -174,7 +175,7 @@ pub(crate) fn remove_worktree_button_rects(inner: Rect, force_confirmation: bool
             },
             ActionButtonSpec {
                 hint: Some("esc"),
-                label: "cancel",
+                label: tr!("button.cancel"),
             },
         ],
         2,
@@ -221,11 +222,11 @@ pub(crate) fn open_existing_worktree_button_rects(inner: Rect) -> (Rect, Rect) {
         &[
             ActionButtonSpec {
                 hint: Some("↵"),
-                label: "open",
+                label: tr!("button.open"),
             },
             ActionButtonSpec {
                 hint: Some("esc"),
-                label: "cancel",
+                label: tr!("button.cancel"),
             },
         ],
         2,
@@ -259,10 +260,10 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
     ])
     .areas::<8>(inner);
 
-    render_modal_header(frame, rows[0], "new worktree", &app.palette);
+    render_modal_header(frame, rows[0], tr!("dialog.new_worktree"), &app.palette);
 
     frame.render_widget(
-        Paragraph::new(" branch").style(Style::default().fg(app.palette.overlay0)),
+        Paragraph::new(format!(" {}", tr!("dialog.branch"))).style(Style::default().fg(app.palette.overlay0)),
         rows[1],
     );
     let input_rect = Rect::new(rows[2].x, rows[2].y, rows[2].width, 1);
@@ -278,7 +279,7 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
 
     let checkout = create.checkout_path.display().to_string();
     frame.render_widget(
-        Paragraph::new(" checkout").style(Style::default().fg(app.palette.overlay0)),
+        Paragraph::new(format!(" {}", tr!("dialog.checkout"))).style(Style::default().fg(app.palette.overlay0)),
         rows[3],
     );
     frame.render_widget(
@@ -288,7 +289,7 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
 
     if create.creating {
         frame.render_widget(
-            Paragraph::new(" creating…").style(Style::default().fg(app.palette.overlay0)),
+            Paragraph::new(format!(" {}…", tr!("dialog.creating"))).style(Style::default().fg(app.palette.overlay0)),
             rows[5],
         );
     } else if let Some(error) = &create.error {
@@ -303,7 +304,7 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
         frame,
         create_rect,
         Some("↵"),
-        "create and open",
+        tr!("button.create_and_open"),
         Style::default()
             .fg(panel_contrast_fg(&app.palette))
             .bg(app.palette.accent)
@@ -313,7 +314,7 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
         frame,
         cancel_rect,
         Some("esc"),
-        "cancel",
+        tr!("button.cancel"),
         Style::default()
             .fg(app.palette.text)
             .bg(app.palette.surface0)
@@ -349,7 +350,7 @@ pub(super) fn render_remove_worktree_overlay(app: &AppState, frame: &mut Frame, 
 
     frame.render_widget(
         Paragraph::new(Line::from(vec![Span::styled(
-            " delete worktree checkout?",
+            &format!(" {}", tr!("dialog.delete_worktree")),
             Style::default()
                 .fg(app.palette.red)
                 .add_modifier(Modifier::BOLD),
@@ -380,7 +381,7 @@ pub(super) fn render_remove_worktree_overlay(app: &AppState, frame: &mut Frame, 
     }
     if remove.removing {
         frame.render_widget(
-            Paragraph::new(" removing…").style(Style::default().fg(app.palette.overlay0)),
+            Paragraph::new(format!(" {}…", tr!("dialog.removing"))).style(Style::default().fg(app.palette.overlay0)),
             rows[5],
         );
     } else if let Some(error) = &remove.error {
@@ -392,9 +393,9 @@ pub(super) fn render_remove_worktree_overlay(app: &AppState, frame: &mut Frame, 
 
     let (remove_rect, cancel_rect) = remove_worktree_button_rects(inner, remove.force_confirmation);
     let remove_label = if remove.force_confirmation {
-        "delete anyway"
+        tr!("button.delete_anyway")
     } else {
-        "remove"
+        tr!("button.remove")
     };
     render_action_button(
         frame,
@@ -410,7 +411,7 @@ pub(super) fn render_remove_worktree_overlay(app: &AppState, frame: &mut Frame, 
         frame,
         cancel_rect,
         Some("esc"),
-        "cancel",
+        tr!("button.cancel"),
         Style::default()
             .fg(app.palette.text)
             .bg(app.palette.surface0)
@@ -512,7 +513,7 @@ pub(super) fn render_open_existing_worktree_overlay(app: &AppState, frame: &mut 
 
     if filtered.is_empty() {
         frame.render_widget(
-            Paragraph::new(" no matching worktrees")
+            Paragraph::new(format!(" {}", tr!("dialog.no_matching_worktrees")))
                 .style(Style::default().fg(app.palette.overlay0)),
             Rect::new(inner.x, inner.y.saturating_add(3), inner.width, 1),
         );
@@ -535,7 +536,7 @@ pub(super) fn render_open_existing_worktree_overlay(app: &AppState, frame: &mut 
         frame,
         open_rect,
         Some("↵"),
-        "open",
+        tr!("button.open"),
         Style::default()
             .fg(panel_contrast_fg(&app.palette))
             .bg(app.palette.accent)
@@ -545,7 +546,7 @@ pub(super) fn render_open_existing_worktree_overlay(app: &AppState, frame: &mut 
         frame,
         cancel_rect,
         Some("esc"),
-        "cancel",
+        tr!("button.cancel"),
         Style::default()
             .fg(app.palette.text)
             .bg(app.palette.surface0)
@@ -575,7 +576,7 @@ fn render_open_worktree_search(
     let mut spans = vec![Span::styled(" / ", focus_style)];
     if open.query.trim().is_empty() {
         spans.push(Span::styled(
-            "filter worktrees",
+            tr!("dialog.filter_worktrees"),
             Style::default().fg(app.palette.overlay0),
         ));
     } else {
@@ -649,9 +650,9 @@ fn confirm_close_overlay_text(app: &AppState) -> (String, String) {
     };
 
     let title = if closes_group {
-        "Close worktree group?"
+        tr!("dialog.close_group")
     } else {
-        "Close workspace?"
+        tr!("dialog.close_workspace")
     };
     let detail = format!("{ws_name} — {workspace_text}{pane_text}");
     (title.to_string(), detail)
@@ -711,7 +712,7 @@ pub(super) fn render_confirm_close_overlay(app: &AppState, frame: &mut Frame, ar
             frame,
             confirm_rect,
             Some("↵"),
-            "confirm",
+            tr!("button.confirm"),
             Style::default()
                 .fg(panel_contrast_fg(&app.palette))
                 .bg(app.palette.red)
@@ -721,7 +722,7 @@ pub(super) fn render_confirm_close_overlay(app: &AppState, frame: &mut Frame, ar
             frame,
             cancel_rect,
             Some("esc"),
-            "cancel",
+            tr!("button.cancel"),
             Style::default()
                 .fg(app.palette.text)
                 .bg(app.palette.surface0)
@@ -740,11 +741,11 @@ pub(crate) fn confirm_close_button_rects(inner: Rect) -> (Rect, Rect) {
         &[
             ActionButtonSpec {
                 hint: Some("↵"),
-                label: "confirm",
+                label: tr!("button.confirm"),
             },
             ActionButtonSpec {
                 hint: Some("esc"),
-                label: "cancel",
+                label: tr!("button.cancel"),
             },
         ],
         2,

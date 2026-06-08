@@ -1,3 +1,4 @@
+use crate::tr;
 use ratatui::{
     layout::Rect,
     style::{Color, Modifier, Style},
@@ -473,29 +474,29 @@ fn render_empty(app: &AppState, frame: &mut Frame, area: Rect) {
         Line::from(""),
         Line::from(""),
         Line::from(Span::styled(
-            "  No workspaces yet",
+            format!("  {}", tr!("pane.no_workspaces")),
             Style::default().fg(p.overlay0),
         )),
         Line::from(""),
         Line::from(Span::styled(
-            "  A workspace is one project context.",
+            format!("  {}", tr!("pane.workspace_desc")),
             Style::default().fg(p.overlay1),
         )),
         Line::from(Span::styled(
-            "  Its root pane (top-left) sets the default repo or folder name.",
+            format!("  {}", tr!("pane.root_pane_desc")),
             Style::default().fg(p.overlay1),
         )),
         Line::from(""),
         Line::from(vec![
-            Span::styled("  Press ", Style::default().fg(p.overlay0)),
+            Span::styled(format!("  {} ", tr!("pane.press")), Style::default().fg(p.overlay0)),
             Span::styled(
                 app.keybinds
                     .new_workspace
                     .label()
-                    .unwrap_or_else(|| "unset".to_string()),
+                    .unwrap_or_else(|| tr!("pane.unset").to_string()),
                 Style::default().fg(p.accent).add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" to create one", Style::default().fg(p.overlay0)),
+            Span::styled(format!(" {}", tr!("pane.to_create")), Style::default().fg(p.overlay0)),
         ]),
     ];
     frame.render_widget(

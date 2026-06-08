@@ -1,3 +1,4 @@
+use crate::tr;
 use ratatui::{
     layout::{Constraint, Layout, Rect},
     style::{Color, Modifier, Style},
@@ -215,13 +216,13 @@ pub(super) fn agent_icon(
     }
 }
 
-pub(super) fn state_label(state: AgentState, seen: bool) -> &'static str {
+pub(super) fn state_label(state: AgentState, seen: bool) -> String {
     match (state, seen) {
-        (AgentState::Blocked, _) => "blocked",
-        (AgentState::Working, _) => "working",
-        (AgentState::Idle, false) => "done",
-        (AgentState::Idle, true) => "idle",
-        (AgentState::Unknown, _) => "idle",
+        (AgentState::Blocked, _) => tr!("agent_state.blocked").to_string(),
+        (AgentState::Working, _) => tr!("agent_state.working").to_string(),
+        (AgentState::Idle, false) => tr!("agent_state.done").to_string(),
+        (AgentState::Idle, true) => tr!("agent_state.idle").to_string(),
+        (AgentState::Unknown, _) => tr!("agent_state.idle").to_string(),
     }
 }
 
@@ -244,7 +245,7 @@ mod tests {
         ToastNotification {
             kind: ToastKind::Finished,
             title: "done".to_string(),
-            context: "workspace".to_string(),
+            context: tr!("toast.workspace").to_string(),
             position: None,
             target: None,
         }
@@ -252,7 +253,7 @@ mod tests {
 
     fn feedback() -> CopyFeedback {
         CopyFeedback {
-            message: "copied to clipboard".to_string(),
+            message: tr!("toast.copied").to_string(),
         }
     }
 

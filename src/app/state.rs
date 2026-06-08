@@ -843,6 +843,7 @@ pub enum SettingsSection {
     PaneLabels,
     Experiments,
     Integrations,
+    Language,
 }
 
 impl SettingsSection {
@@ -853,6 +854,7 @@ impl SettingsSection {
         Self::PaneLabels,
         Self::Integrations,
         Self::Experiments,
+        Self::Language,
     ];
 
     pub fn label(self) -> &'static str {
@@ -863,6 +865,7 @@ impl SettingsSection {
             Self::PaneLabels => "pane labels",
             Self::Experiments => "experiments",
             Self::Integrations => "integrations",
+            Self::Language => "language",
         }
     }
 }
@@ -1373,6 +1376,8 @@ pub struct AppState {
     pub palette: Palette,
     /// Currently applied theme name (for settings UI).
     pub theme_name: String,
+    /// Currently active UI language (for settings UI).
+    pub language: crate::i18n::Language,
     /// Settings panel state.
     pub settings: SettingsState,
     /// Cached integration recommendations for onboarding/settings UI.
@@ -1417,6 +1422,10 @@ impl AppState {
 
     pub fn switch_ascii_input_source_in_prefix_enabled(&self) -> bool {
         self.switch_ascii_input_source_in_prefix
+    }
+
+    pub fn current_language(&self) -> crate::i18n::Language {
+        self.language
     }
 
     pub(crate) fn pane_exposes_host_cursor(
@@ -1693,6 +1702,7 @@ impl AppState {
             spinner_tick: 0,
             palette: Palette::catppuccin(),
             theme_name: "catppuccin".to_string(),
+            language: crate::i18n::Language::En,
             settings: SettingsState {
                 section: SettingsSection::Theme,
                 list: SelectionListState::new(0),

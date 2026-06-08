@@ -1,3 +1,4 @@
+use crate::tr;
 use ratatui::{
     layout::{Alignment, Rect},
     style::{Modifier, Style},
@@ -245,7 +246,7 @@ pub(crate) fn render_mobile_panel(
 
     let areas = mobile_switcher_areas(app);
     frame.render_widget(
-        Paragraph::new(" switch").style(
+        Paragraph::new(tr!("mobile.switch")).style(
             Style::default()
                 .fg(p.text)
                 .bg(p.panel_bg)
@@ -277,7 +278,7 @@ fn render_header_status(
     }
     let p = &app.palette;
     let Some(ws) = app.active.and_then(|idx| app.workspaces.get(idx)) else {
-        frame.render_widget(Paragraph::new(" no workspace"), area);
+        frame.render_widget(Paragraph::new(tr!("mobile.no_workspace")), area);
         return;
     };
 
@@ -342,7 +343,7 @@ fn render_switch_button(app: &AppState, frame: &mut Frame, area: Rect) {
     }
     let label_y = if area.height > 1 { area.y + 1 } else { area.y };
     frame.render_widget(
-        Paragraph::new("switch")
+        Paragraph::new(tr!("mobile.switch"))
             .style(
                 Style::default()
                     .fg(p.text)
@@ -366,7 +367,7 @@ fn render_close_button(app: &AppState, frame: &mut Frame, area: Rect) {
             .set_style(Style::default().fg(p.surface_dim).bg(p.surface0));
     }
     frame.render_widget(
-        Paragraph::new("close")
+        Paragraph::new(tr!("mobile.close"))
             .style(
                 Style::default()
                     .fg(p.overlay1)
@@ -435,7 +436,7 @@ fn render_mobile_switcher_content(
         content,
         doc_y,
         app.mobile_switcher_scroll,
-        "spaces",
+        tr!("mobile.spaces"),
         p,
     );
     doc_y += 1;
@@ -445,7 +446,7 @@ fn render_mobile_switcher_content(
         content,
         doc_y,
         app.mobile_switcher_scroll,
-        "+ new workspace",
+        tr!("mobile.new_workspace"),
         p,
     );
     doc_y += 1;
@@ -497,7 +498,7 @@ fn render_mobile_switcher_content(
             content,
             doc_y,
             app.mobile_switcher_scroll,
-            "tabs",
+            tr!("mobile.tabs"),
             p,
         );
         doc_y += 1;
@@ -507,7 +508,7 @@ fn render_mobile_switcher_content(
             content,
             doc_y,
             app.mobile_switcher_scroll,
-            "+ new tab",
+            tr!("mobile.new_tab"),
             p,
         );
         doc_y += 1;
@@ -554,7 +555,7 @@ fn render_mobile_switcher_content(
         content,
         doc_y,
         app.mobile_switcher_scroll,
-        "agents",
+        tr!("mobile.agents"),
         p,
     );
     doc_y += 1;
@@ -600,7 +601,7 @@ fn render_mobile_switcher_content(
         content,
         doc_y,
         app.mobile_switcher_scroll,
-        "menu",
+        tr!("mobile.menu"),
         p,
     );
     doc_y += 1;
@@ -628,7 +629,7 @@ fn mobile_agent_detail(entry: &AgentPanelEntry) -> String {
             entry.seen,
         ))
         .cloned()
-        .unwrap_or_else(|| super::status::state_label(entry.state, entry.seen).to_string());
+        .unwrap_or_else(|| super::status::state_label(entry.state, entry.seen));
     parts.push(status);
     if let Some(agent_label) = entry.agent_label.as_deref() {
         parts.push(agent_label.to_string());
@@ -853,7 +854,7 @@ fn mobile_screen_rect(app: &AppState) -> Rect {
 
 fn agent_priority_label(app: &AppState) -> String {
     let Some(ws) = app.active.and_then(|idx| app.workspaces.get(idx)) else {
-        return " no agents".to_string();
+        return tr!("mobile.no_agents").to_string();
     };
     let mut blocked = 0usize;
     let mut working = 0usize;
@@ -867,13 +868,13 @@ fn agent_priority_label(app: &AppState) -> String {
         }
     }
     if blocked > 0 {
-        format!(" ◉ {blocked} blocked")
+        format!(" ◉ {blocked} {}", tr!("mobile.blocked"))
     } else if working > 0 {
-        format!(" {working} working")
+        format!(" {working} {}", tr!("mobile.working"))
     } else if done > 0 {
-        format!(" {done} done")
+        format!(" {done} {}", tr!("mobile.done"))
     } else {
-        " all idle".to_string()
+        tr!("mobile.all_idle").to_string()
     }
 }
 
@@ -882,14 +883,14 @@ fn mobile_toast_title(toast: &ToastNotification) -> String {
         ToastKind::NeedsAttention => toast
             .title
             .strip_suffix(" needs attention")
-            .map(|agent| format!("{agent} waiting"))
+            .map(|agent| format!("{agent} {}", tr!("mobile.waiting")))
             .unwrap_or_else(|| toast.title.clone()),
         ToastKind::Finished => toast
             .title
             .strip_suffix(" finished")
-            .map(|agent| format!("{agent} done"))
+            .map(|agent| format!("{agent} {}", tr!("mobile.done")))
             .unwrap_or_else(|| toast.title.clone()),
-        ToastKind::UpdateInstalled => "update ready".to_string(),
+        ToastKind::UpdateInstalled => tr!("mobile.update_ready").to_string(),
     }
 }
 
