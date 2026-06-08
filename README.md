@@ -2,6 +2,8 @@
 
 > 🇨🇳 **这是 [herdr](https://github.com/ogulcancelik/herdr) 的中文镜像分支。**
 > 本仓库定期与上游同步，所有中文翻译贡献欢迎提 PR。
+>
+> 📖 [中文文档 / Chinese README](README_zh.md)
 
 <p align="center">
   <img src="assets/logo.png" alt="herdr" width="100" />
