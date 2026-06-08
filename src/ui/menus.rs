@@ -17,7 +17,9 @@ fn prefix_rhs_label(bindings: &crate::config::ActionKeybinds) -> String {
 }
 
 fn keybind_label(bindings: &crate::config::ActionKeybinds) -> String {
-    bindings.label().unwrap_or_else(|| tr!("pane.unset").to_string())
+    bindings
+        .label()
+        .unwrap_or_else(|| tr!("pane.unset").to_string())
 }
 
 fn render_bottom_bar(frame: &mut Frame, area: Rect, line: Line<'_>, bg: ratatui::style::Color) {

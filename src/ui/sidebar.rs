@@ -1024,7 +1024,10 @@ fn render_workspace_list(
     if app.mouse_capture && list_bottom > area.y {
         let new_rect = app.sidebar_new_button_rect();
         frame.render_widget(
-            Paragraph::new(Span::styled(format!(" {}", tr!("sidebar.new")), Style::default().fg(p.overlay0))),
+            Paragraph::new(Span::styled(
+                format!(" {}", tr!("sidebar.new")),
+                Style::default().fg(p.overlay0),
+            )),
             new_rect,
         );
 
@@ -1038,7 +1041,10 @@ fn render_workspace_list(
                 Span::styled(tr!("sidebar.menu"), Style::default().fg(p.overlay0)),
             ])
         } else {
-            Line::from(vec![Span::styled(tr!("sidebar.menu"), Style::default().fg(p.overlay0))])
+            Line::from(vec![Span::styled(
+                tr!("sidebar.menu"),
+                Style::default().fg(p.overlay0),
+            )])
         };
         frame.render_widget(
             Paragraph::new(menu_line).alignment(Alignment::Right),

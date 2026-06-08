@@ -64,7 +64,7 @@ fn render_onboarding_welcome(app: &AppState, frame: &mut Frame, area: Rect) {
 
     frame.render_widget(
         Paragraph::new(format!("  {}", tr!("onboarding.description")))
-        .style(Style::default().fg(app.palette.overlay1)),
+            .style(Style::default().fg(app.palette.overlay1)),
         content_rows[0],
     );
 

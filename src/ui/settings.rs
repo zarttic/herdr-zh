@@ -257,11 +257,9 @@ fn render_settings_integrations(app: &AppState, frame: &mut Frame, area: Rect) {
         rows[0],
     );
     frame.render_widget(
-        Paragraph::new(
-            tr!("settings.integrations_desc"),
-        )
-        .style(Style::default().fg(p.overlay1))
-        .wrap(ratatui::widgets::Wrap { trim: false }),
+        Paragraph::new(tr!("settings.integrations_desc"))
+            .style(Style::default().fg(p.overlay1))
+            .wrap(ratatui::widgets::Wrap { trim: false }),
         rows[1],
     );
 
@@ -375,10 +373,7 @@ fn render_settings_language(app: &AppState, frame: &mut Frame, area: Rect) {
             let is_current = *lang == current;
             let marker = if is_current { " ✓" } else { "" };
             ListItem::new(Line::from(vec![
-                Span::styled(
-                    lang.display_name(),
-                    Style::default().fg(p.subtext0),
-                ),
+                Span::styled(lang.display_name(), Style::default().fg(p.subtext0)),
                 Span::styled(marker, Style::default().fg(p.green)),
             ]))
         })
@@ -412,7 +407,10 @@ fn render_settings_toggle(
         area,
         title,
         description,
-        &[(tr!("settings.toast.system"), true), (tr!("settings.toast.off"), false)],
+        &[
+            (tr!("settings.toast.system"), true),
+            (tr!("settings.toast.off"), false),
+        ],
         current_value,
         selected_idx,
         p,

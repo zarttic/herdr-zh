@@ -488,7 +488,10 @@ fn render_empty(app: &AppState, frame: &mut Frame, area: Rect) {
         )),
         Line::from(""),
         Line::from(vec![
-            Span::styled(format!("  {} ", tr!("pane.press")), Style::default().fg(p.overlay0)),
+            Span::styled(
+                format!("  {} ", tr!("pane.press")),
+                Style::default().fg(p.overlay0),
+            ),
             Span::styled(
                 app.keybinds
                     .new_workspace
@@ -496,7 +499,10 @@ fn render_empty(app: &AppState, frame: &mut Frame, area: Rect) {
                     .unwrap_or_else(|| tr!("pane.unset").to_string()),
                 Style::default().fg(p.accent).add_modifier(Modifier::BOLD),
             ),
-            Span::styled(format!(" {}", tr!("pane.to_create")), Style::default().fg(p.overlay0)),
+            Span::styled(
+                format!(" {}", tr!("pane.to_create")),
+                Style::default().fg(p.overlay0),
+            ),
         ]),
     ];
     frame.render_widget(

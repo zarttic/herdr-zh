@@ -387,7 +387,11 @@ fn pane_detail(
     };
     let mut parts = vec![ws.display_name_from(&app.terminals, terminal_runtimes)];
     if ws.tabs.len() > 1 {
-        parts.push(format!("{}: {}", tr!("navigator.tab_prefix"), tab.display_name()));
+        parts.push(format!(
+            "{}: {}",
+            tr!("navigator.tab_prefix"),
+            tab.display_name()
+        ));
     }
     if let Some(pane_number) = ws.public_pane_number(pane_id) {
         parts.push(format!("pane {pane_number}"));

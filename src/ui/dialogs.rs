@@ -263,7 +263,8 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
     render_modal_header(frame, rows[0], tr!("dialog.new_worktree"), &app.palette);
 
     frame.render_widget(
-        Paragraph::new(format!(" {}", tr!("dialog.branch"))).style(Style::default().fg(app.palette.overlay0)),
+        Paragraph::new(format!(" {}", tr!("dialog.branch")))
+            .style(Style::default().fg(app.palette.overlay0)),
         rows[1],
     );
     let input_rect = Rect::new(rows[2].x, rows[2].y, rows[2].width, 1);
@@ -279,7 +280,8 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
 
     let checkout = create.checkout_path.display().to_string();
     frame.render_widget(
-        Paragraph::new(format!(" {}", tr!("dialog.checkout"))).style(Style::default().fg(app.palette.overlay0)),
+        Paragraph::new(format!(" {}", tr!("dialog.checkout")))
+            .style(Style::default().fg(app.palette.overlay0)),
         rows[3],
     );
     frame.render_widget(
@@ -289,7 +291,8 @@ pub(super) fn render_new_linked_worktree_overlay(app: &AppState, frame: &mut Fra
 
     if create.creating {
         frame.render_widget(
-            Paragraph::new(format!(" {}…", tr!("dialog.creating"))).style(Style::default().fg(app.palette.overlay0)),
+            Paragraph::new(format!(" {}…", tr!("dialog.creating")))
+                .style(Style::default().fg(app.palette.overlay0)),
             rows[5],
         );
     } else if let Some(error) = &create.error {
@@ -381,7 +384,8 @@ pub(super) fn render_remove_worktree_overlay(app: &AppState, frame: &mut Frame, 
     }
     if remove.removing {
         frame.render_widget(
-            Paragraph::new(format!(" {}…", tr!("dialog.removing"))).style(Style::default().fg(app.palette.overlay0)),
+            Paragraph::new(format!(" {}…", tr!("dialog.removing")))
+                .style(Style::default().fg(app.palette.overlay0)),
             rows[5],
         );
     } else if let Some(error) = &remove.error {

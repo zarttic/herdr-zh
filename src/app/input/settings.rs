@@ -142,9 +142,7 @@ fn apply_settings(state: &mut AppState) -> Option<SettingsAction> {
             Some(SettingsAction::SaveTheme(theme_name))
         }
         SettingsSection::Language => {
-            if let Some(&lang) =
-                crate::i18n::Language::all().get(state.settings.list.selected)
-            {
+            if let Some(&lang) = crate::i18n::Language::all().get(state.settings.list.selected) {
                 super::modal::leave_modal(state);
                 return Some(SettingsAction::SaveLanguage(lang));
             }
@@ -315,8 +313,7 @@ pub(super) fn update_settings_state(state: &mut AppState, key: KeyEvent) -> Opti
                     .move_next(crate::i18n::Language::all().len());
             }
             KeyCode::Enter | KeyCode::Char(' ') => {
-                if let Some(&lang) =
-                    crate::i18n::Language::all().get(state.settings.list.selected)
+                if let Some(&lang) = crate::i18n::Language::all().get(state.settings.list.selected)
                 {
                     return Some(SettingsAction::SaveLanguage(lang));
                 }
@@ -507,11 +504,9 @@ impl AppState {
                         }
                         SettingsSection::Experiments => experiment_toggle_action(self, idx),
                         SettingsSection::Integrations => None,
-                        SettingsSection::Language => {
-                            crate::i18n::Language::all()
-                                .get(idx)
-                                .map(|&lang| SettingsAction::SaveLanguage(lang))
-                        }
+                        SettingsSection::Language => crate::i18n::Language::all()
+                            .get(idx)
+                            .map(|&lang| SettingsAction::SaveLanguage(lang)),
                     };
                 }
 
