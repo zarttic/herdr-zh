@@ -1,9 +1,10 @@
-# herdr
+# herdr-zh
 
-> 🇨🇳 这是 [herdr](https://github.com/ogulcancelik/herdr) 的中文镜像分支。
-> 本仓库定期与上游同步，中文翻译贡献欢迎提 PR。
+> 🇨🇳 **[herdr](https://github.com/ogulcancelik/herdr) 中文版** — 终端中的 agent 多路复用器
 >
-> 📖 [English / 原版 README](https://github.com/ogulcancelik/herdr/blob/master/README.md)
+> 🔗 原项目：[github.com/ogulcancelik/herdr](https://github.com/ogulcancelik/herdr) · [English README](https://github.com/ogulcancelik/herdr/blob/master/README.md)
+>
+> 本仓库定期与上游同步，中文翻译贡献欢迎提 PR。
 
 <p align="center">
   <img src="assets/logo.png" alt="herdr" width="100" />
@@ -21,16 +22,15 @@
 
 ## 安装
 
-```bash
-curl -fsSL https://herdr.dev/install.sh | sh
-```
+从本仓库 [Releases](https://github.com/zarttic/herdr-zh/releases) 下载对应平台的二进制文件（需要 Linux 或 macOS）。
+
+或使用原项目的安装方式：
 
 ```bash
+curl -fsSL https://herdr.dev/install.sh | sh
 brew install herdr          # Homebrew
 mise use -g herdr           # mise
 ```
-
-或从 [Releases](https://github.com/ogulcancelik/herdr/releases) 下载二进制文件（需要 Linux 或 macOS）。
 
 ## 快速开始
 
@@ -80,7 +80,3 @@ herdr
 ## 许可证
 
 双许可：[AGPL-3.0-or-later](https://github.com/ogulcancelik/herdr/blob/master/LICENSE) 或商业许可（联系 hey@herdr.dev）。
-
----
-
-> 🔗 **原项目地址：[github.com/ogulcancelik/herdr](https://github.com/ogulcancelik/herdr)**
